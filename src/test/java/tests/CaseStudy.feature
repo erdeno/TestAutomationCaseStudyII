@@ -18,17 +18,17 @@ Feature: CaseStudy
       |  pending   |
       |  available |
 
-  @done
+  @done @taskIII
   Scenario: Task III
     * configure headers = { 'Content-Type': 'application/json' }
     * path 'user'
     * def data = read('classpath:data/userJson.json')
     * def Helper = Java.type('helper.Helper')
     * def id = Helper.createNumber()
+    * data.username = (typeof username == 'undefined') ? Helper.createRandomString() : username
+    * data.firstName = (typeof firstName == 'undefined') ? Helper.createRandomString() : firstName
+    * data.lastName = (typeof lastName == 'undefined') ? Helper.createRandomString() : lastName
     * data.id = id
-    * data.username = Helper.createRandomString()
-    * data.firstName = Helper.createRandomString()
-    * data.lastName = Helper.createRandomString()
     * data.email = Helper.createMail()
     * data.password = Helper.createRandomString()
     * data.phone = Helper.createPhoneNumber()
@@ -39,11 +39,11 @@ Feature: CaseStudy
     * match response.message == id + ""
 
   @done
-  Scenario: Call TaskIV
+  Scenario: Call TaskIII with parameters
     * def username = 'jdoe'
     * def firstName = 'John'
     * def lastName = 'Doe'
-    * def result = call read('classpath:callers/Caller.feature@taskIV') { username: #(username), firstName: #(firstName), lastName: #(lastName) }
+    * def result = call read('classpath:tests/CaseStudy.feature@taskIII') { username: #(username), firstName: #(firstName), lastName: #(lastName) }
     * match result.responseStatus == 200
     * match result.username == username
     * match result.data.firstName == firstName
